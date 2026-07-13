@@ -1442,67 +1442,67 @@ bool yarp::dev::KeyboardJoypad::stopService()
     return this->close();
 }
 
-bool yarp::dev::KeyboardJoypad::getAxisCount(unsigned int& axis_count)
+yarp::dev::ReturnValue yarp::dev::KeyboardJoypad::getAxisCount(size_t& axis_count)
 {
     std::lock_guard<std::mutex> lock(m_pimpl->mutex);
-    axis_count = static_cast<unsigned int>(m_pimpl->axes_values.size());
-    return true;
+    axis_count = m_pimpl->axes_values.size();
+    return ReturnValue_ok;
 }
 
-bool yarp::dev::KeyboardJoypad::getButtonCount(unsigned int& button_count)
+yarp::dev::ReturnValue yarp::dev::KeyboardJoypad::getButtonCount(size_t& button_count)
 {
     std::lock_guard<std::mutex> lock(m_pimpl->mutex);
-    button_count = static_cast<unsigned int>(m_pimpl->buttons_values.size());
-    return true;
+    button_count = m_pimpl->buttons_values.size();
+    return ReturnValue_ok;
 }
 
-bool yarp::dev::KeyboardJoypad::getTrackballCount(unsigned int& trackball_count)
+yarp::dev::ReturnValue yarp::dev::KeyboardJoypad::getTrackballCount(size_t& trackball_count)
 {
     trackball_count = 0;
-    return true;
+    return ReturnValue_ok;
 }
 
-bool yarp::dev::KeyboardJoypad::getHatCount(unsigned int& hat_count)
+yarp::dev::ReturnValue yarp::dev::KeyboardJoypad::getHatCount(size_t& hat_count)
 {
     hat_count = 0;
-    return true;
+    return ReturnValue_ok;
 }
 
-bool yarp::dev::KeyboardJoypad::getTouchSurfaceCount(unsigned int& touch_count)
+yarp::dev::ReturnValue yarp::dev::KeyboardJoypad::getTouchSurfaceCount(size_t& touch_count)
 {
     touch_count = 0;
-    return true;
+    return ReturnValue_ok;
 }
 
-bool yarp::dev::KeyboardJoypad::getStickCount(unsigned int& stick_count)
+yarp::dev::ReturnValue yarp::dev::KeyboardJoypad::getStickCount(size_t& stick_count)
 {
     std::lock_guard<std::mutex> lock(m_pimpl->mutex);
-    stick_count = static_cast<unsigned int>(m_pimpl->sticks_to_axes.size());
-    return true;
+    stick_count = m_pimpl->sticks_to_axes.size();
+    return ReturnValue_ok;
 }
 
-bool yarp::dev::KeyboardJoypad::getStickDoF(unsigned int stick_id, unsigned int& dof)
+yarp::dev::ReturnValue yarp::dev::KeyboardJoypad::getStickDoF(size_t stick_id, size_t& dof)
 {
     std::lock_guard<std::mutex> lock(m_pimpl->mutex);
     if (stick_id >= m_pimpl->sticks_to_axes.size())
     {
         yCError(KEYBOARDJOYPAD) << "The stick with id" << stick_id << "does not exist.";
-        return false;
+        return ReturnValue_error_input_out_of_bounds;
     }
 
-    dof = static_cast<unsigned int>(m_pimpl->sticks_to_axes[stick_id].size());
+    dof = m_pimpl->sticks_to_axes[stick_id].size();
 
-    return true;
+    return ReturnValue_ok;
 }
 
-bool yarp::dev::KeyboardJoypad::getButton(unsigned int button_id, float& value)
+yarp::dev::ReturnValue yarp::dev::KeyboardJoypad::getButton(size_t button_id, double& value)
 {
     std::lock_guard<std::mutex> lock(m_pimpl->mutex);
     if (!m_pimpl->initialized)
     {
         if (!m_pimpl->initialize())
         {
-            return false;
+            return ReturnValue_error_not_ready;
         }
     }
     if (m_pimpl->settings.single_threaded && m_pimpl->needUpdate())
@@ -1512,32 +1512,32 @@ bool yarp::dev::KeyboardJoypad::getButton(unsigned int button_id, float& value)
     if (button_id >= m_pimpl->buttons_values.size())
     {
         yCError(KEYBOARDJOYPAD) << "The button with id" << button_id << "does not exist.";
-        return false;
+        return ReturnValue_error_input_out_of_bounds;
     }
-    value = static_cast<float>(m_pimpl->buttons_values[button_id]);
-    return true;
+    value = m_pimpl->buttons_values[button_id];
+    return ReturnValue_ok;
 }
 
-bool yarp::dev::KeyboardJoypad::getTrackball(unsigned int /*trackball_id*/, yarp::sig::Vector& /*value*/)
+yarp::dev::ReturnValue yarp::dev::KeyboardJoypad::getTrackball(size_t /*trackball_id*/, yarp::dev::TrackballData& /*value*/)
 {
     yCError(KEYBOARDJOYPAD) << "This device does not consider trackballs.";
-    return false;
+    return ReturnValue_error_not_implemented_by_device;
 }
 
-bool yarp::dev::KeyboardJoypad::getHat(unsigned int /*hat_id*/, unsigned char& /*value*/)
+yarp::dev::ReturnValue yarp::dev::KeyboardJoypad::getHat(size_t /*hat_id*/, unsigned char& /*value*/)
 {
     yCError(KEYBOARDJOYPAD) << "This device does not consider hats.";
-    return false;
+    return ReturnValue_error_not_implemented_by_device;
 }
 
-bool yarp::dev::KeyboardJoypad::getAxis(unsigned int axis_id, double& value)
+yarp::dev::ReturnValue yarp::dev::KeyboardJoypad::getAxis(size_t axis_id, double& value)
 {
     std::lock_guard<std::mutex> lock(m_pimpl->mutex);
     if (!m_pimpl->initialized)
     {
         if (!m_pimpl->initialize())
         {
-            return false;
+            return ReturnValue_error_not_ready;
         }
     }
     if (m_pimpl->settings.single_threaded && m_pimpl->needUpdate())
@@ -1547,20 +1547,20 @@ bool yarp::dev::KeyboardJoypad::getAxis(unsigned int axis_id, double& value)
     if (axis_id >= m_pimpl->axes_values.size())
     {
         yCError(KEYBOARDJOYPAD) << "The axis with id" << axis_id << "does not exist.";
-        return false;
+        return ReturnValue_error_input_out_of_bounds;
     }
     value = m_pimpl->axes_values[axis_id];
-    return true;
+    return ReturnValue_ok;
 }
 
-bool yarp::dev::KeyboardJoypad::getStick(unsigned int stick_id, yarp::sig::Vector& value, JoypadCtrl_coordinateMode coordinate_mode)
+yarp::dev::ReturnValue yarp::dev::KeyboardJoypad::getStick(size_t stick_id, yarp::dev::StickData& value, JoypadCtrl_coordinateMode coordinate_mode)
 {
     std::lock_guard<std::mutex> lock(m_pimpl->mutex);
     if (!m_pimpl->initialized)
     {
         if (!m_pimpl->initialize())
         {
-            return false;
+            return ReturnValue_error_not_ready;
         }
     }
     if (m_pimpl->settings.single_threaded && m_pimpl->needUpdate())
@@ -1570,34 +1570,26 @@ bool yarp::dev::KeyboardJoypad::getStick(unsigned int stick_id, yarp::sig::Vecto
     if (stick_id >= m_pimpl->sticks_values.size())
     {
         yCError(KEYBOARDJOYPAD) << "The stick with id" << stick_id << "does not exist.";
-        return false;
+        return ReturnValue_error_input_out_of_bounds;
     }
 
-    value.resize(m_pimpl->sticks_values[stick_id].size());
-
-    for (size_t i = 0; i < value.size(); i++)
-    {
-        value[i] = m_pimpl->sticks_values[stick_id][i];
-    }
-
-    if (value.size() != 2)
-    {
-        return true;
-    }
+    auto& stick_vals = m_pimpl->sticks_values[stick_id];
+    value.s1 = stick_vals.size() > 0 ? stick_vals[0] : 0.0;
+    value.s2 = stick_vals.size() > 1 ? stick_vals[1] : 0.0;
 
     if (coordinate_mode == JoypadCtrl_coordinateMode::JypCtrlcoord_POLAR)
     {
-        double norm = sqrt(value[0] * value[0] + value[1] * value[1]);
-        double angle = atan2(value[1], value[0]);
-        value[0] = norm;
-        value[1] = angle;
+        double norm = sqrt(value.s1 * value.s1 + value.s2 * value.s2);
+        double angle = atan2(value.s2, value.s1);
+        value.s1 = norm;
+        value.s2 = angle;
     }
 
-    return true;
+    return ReturnValue_ok;
 }
 
-bool yarp::dev::KeyboardJoypad::getTouch(unsigned int /*touch_id*/, yarp::sig::Vector& /*value*/)
+yarp::dev::ReturnValue yarp::dev::KeyboardJoypad::getTouch(size_t /*touch_id*/, std::vector<yarp::dev::TouchData>& /*value*/)
 {
     yCError(KEYBOARDJOYPAD) << "This device does not consider touch surfaces.";
-    return false;
+    return ReturnValue_error_not_implemented_by_device;
 }

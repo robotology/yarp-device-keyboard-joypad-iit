@@ -71,7 +71,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 ### Dependencies
 find_package(YCM REQUIRED)
-find_package(YARP 3.4 COMPONENTS os sig dev math idl_tools REQUIRED)
+find_package(YARP 4.0.0 COMPONENTS os sig dev math idl_tools REQUIRED)
 find_package(Threads REQUIRED)
 find_package(glfw3 REQUIRED NO_MODULE)
 find_package(GLEW REQUIRED) #Helps with the OpenGL configuration on Windows
