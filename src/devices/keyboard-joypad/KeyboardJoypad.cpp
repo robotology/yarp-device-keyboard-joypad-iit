@@ -1048,7 +1048,7 @@ public:
                 }
             }
             ImGui::Separator();
-            ImGui::Text(connectedJoypads.c_str());
+            ImGui::TextUnformatted(connectedJoypads.c_str());
             std::string axes_values = "Joypad axes values: ";
             for (size_t i = 0; i < this->joypad_axis_values.size(); ++i)
             {
@@ -1062,7 +1062,7 @@ public:
                     axes_values += ", ";
                 }
             }
-            ImGui::Text(axes_values.c_str());
+            ImGui::TextUnformatted(axes_values.c_str());
             std::string buttons_values = "Joypad buttons values: ";
             for (size_t i = 0; i < this->joypad_button_values.size(); ++i)
             {
@@ -1072,7 +1072,7 @@ public:
                     buttons_values += ", ";
                 }
             }
-            ImGui::Text(buttons_values.c_str());
+            ImGui::TextUnformatted(buttons_values.c_str());
         }
         ImGui::Separator();
         std::string output_axes_values = "Output axes values: ";
@@ -1088,7 +1088,7 @@ public:
                 output_axes_values += ", ";
             }
         }
-        ImGui::Text(output_axes_values.c_str());
+        ImGui::TextUnformatted(output_axes_values.c_str());
         std::string output_buttons_values = "Output buttons values: ";
         if (this->buttons_values.empty())
         {
@@ -1104,7 +1104,7 @@ public:
                 output_buttons_values += ", ";
             }
         }
-        ImGui::Text(output_buttons_values.c_str());
+        ImGui::TextUnformatted(output_buttons_values.c_str());
         ImGui::End();
 
         // Rendering
@@ -1478,20 +1478,6 @@ yarp::dev::ReturnValue yarp::dev::KeyboardJoypad::getStickCount(size_t& stick_co
 {
     std::lock_guard<std::mutex> lock(m_pimpl->mutex);
     stick_count = m_pimpl->sticks_to_axes.size();
-    return ReturnValue_ok;
-}
-
-yarp::dev::ReturnValue yarp::dev::KeyboardJoypad::getStickDoF(size_t stick_id, size_t& dof)
-{
-    std::lock_guard<std::mutex> lock(m_pimpl->mutex);
-    if (stick_id >= m_pimpl->sticks_to_axes.size())
-    {
-        yCError(KEYBOARDJOYPAD) << "The stick with id" << stick_id << "does not exist.";
-        return ReturnValue_error_input_out_of_bounds;
-    }
-
-    dof = m_pimpl->sticks_to_axes[stick_id].size();
-
     return ReturnValue_ok;
 }
 
