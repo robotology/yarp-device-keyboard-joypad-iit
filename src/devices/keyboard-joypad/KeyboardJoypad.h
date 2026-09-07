@@ -53,7 +53,6 @@ public:
     virtual yarp::dev::ReturnValue getHatCount(size_t& hat_count) override;
     virtual yarp::dev::ReturnValue getTouchSurfaceCount(size_t& touch_count) override;
     virtual yarp::dev::ReturnValue getStickCount(size_t& stick_count) override;
-    virtual yarp::dev::ReturnValue getStickDoF(size_t stick_id, size_t& dof) override;
     virtual yarp::dev::ReturnValue getButton(size_t button_id, double& value) override;
     virtual yarp::dev::ReturnValue getTrackball(size_t trackball_id, yarp::dev::TrackballData& value) override;
     virtual yarp::dev::ReturnValue getHat(size_t hat_id, unsigned char& value) override;
