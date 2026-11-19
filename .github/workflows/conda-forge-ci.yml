@@ -1,12 +1,12 @@
 name: C++ CI Workflow with conda-forge dependencies
 
 on:
-  push:
-  pull_request:
+  #push:
+  #pull_request:
   schedule:
   # * is a special character in YAML so you have to quote this string
   # Execute a "nightly" build at 2 AM UTC
-  - cron:  '0 2 * * *'
+  #- cron:  '0 2 * * *'
 
 jobs:
   build:
